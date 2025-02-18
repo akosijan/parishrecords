@@ -33,8 +33,11 @@ if (isset($_POST['btn-login'])) {
             if ($user['role'] == 'admin') {
                 header('Location: ../admin/home.php');
                 exit;
-            } elseif ($user['role'] == 'front') {
+            } elseif ($user['role'] == 'user') {
                 header('Location: ../user/home.php');
+                exit;
+            } elseif ($user['role'] == 'front') {
+                header('Location: ../front/home.php');
                 exit;
             } else {
                 // If the role is unknown, handle it gracefully
