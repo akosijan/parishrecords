@@ -12,13 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $gender      = $_POST['gender'];
     $birthplace  = $_POST['birthplace'];
     $book_no     = $_POST['book_no'];
+     $suffix = $_POST['suffix'] ?? ''; 
     $page_no     = $_POST['page_no'];
 
     $stmt = $conn->prepare("INSERT INTO baptism_tbl 
-        (firstname, lastname, birthdate, gender, birthplace, book_no, page_no)
-        VALUES (?, ?, ?, ?, ?, ?, ?)");
+        (firstname, lastname, suffix, birthdate, gender, birthplace, book_no, page_no)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 
-    $stmt->bind_param("sssssss", $firstname, $lastname, $birthdate, $gender, $birthplace, $book_no, $page_no);
+    $stmt->bind_param("sssssss", $firstname, $lastname, $suffix, $birthdate, $gender, $birthplace, $book_no, $page_no);
 
     if ($stmt->execute()) {
         $success = "Record saved successfully!";
@@ -59,9 +60,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" name="firstname" id="firstname" class="form-control" required>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-4">
             <label for="lastname" class="form-label">Last Name</label>
             <input type="text" name="lastname" id="lastname" class="form-control" required>
+        </div>
+
+           <div class="col-md-2">
+            <label for="suffix" class="form-label">Suffix</label>
+            <select name="suffix" id="suffix" class="form-select">
+                <option value="">None</option>
+                <option value="Jr.">Jr.</option>
+                <option value="Sr.">Sr.</option>
+                <option value="II">II</option>
+                <option value="III">III</option>
+                <option value="IV">IV</option>
+            </select>
         </div>
 
         <div class="col-md-4">
