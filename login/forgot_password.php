@@ -75,13 +75,13 @@ if (isset($_SESSION['login_userid'])) {
                             <div id="carouselExample" class="carousel slide w-100" data-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img src="../assets/img/logologin.png" class="d-block w-100" alt="First slide">
+                                        <img src="../assets/img/loginlogo.png" class="d-block w-100" alt="First slide">
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="../assets/img/logologin.png" class="d-block w-100" alt="Second slide">
+                                        <img src="../assets/img/loginlogo.png" class="d-block w-100" alt="Second slide">
                                     </div>
                                     <div class="carousel-item">
-                                        <img src="../assets/img/logologin.png" class="d-block w-100" alt="Third slide">
+                                        <img src="../assets/img/loginlogo.png" class="d-block w-100" alt="Third slide">
                                     </div>
                                 </div>
                                 <a class="carousel-control-prev" href="#carouselExample" role="button" data-slide="prev">

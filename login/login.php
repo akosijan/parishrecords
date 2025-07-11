@@ -142,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <div id="carouselExample" class="carousel slide w-100" data-ride="carousel">
                             <div class="carousel-inner">
                                 <div class="carousel-item active">
-                                    <img src="../assets/img/logologin.png" class="d-block w-100" alt="Slide" />
+                                    <img src="../assets/img/loginlogo.png" class="d-block w-100" alt="Slide" />
                                 </div>
                             </div>
                         </div>
