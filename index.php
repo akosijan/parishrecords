@@ -1,13 +1,4 @@
 <?php
-<<<<<<< HEAD
-if (isset($_SESSION['login_userid'])) {
-    header('location: admin/home.php');
-} else {
-    header('location: login/login.php');
-}
-
-=======
->>>>>>> 6b9a19b0ea0c5cf6f035d8714d7915f7d502f311
 ?>
 
 <!DOCTYPE html>
