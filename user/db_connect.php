@@ -2,12 +2,8 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "cenroormoc";
-
-// Create database connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
+$database = "prms";
+$conn = new mysqli($servername, $username, $password, $database);
 if ($conn->connect_error) {
-    die(json_encode(["status" => "error", "message" => "Database Connection Failed: " . $conn->connect_error]));
+    die("Connection failed: " . $conn->connect_error);
 }

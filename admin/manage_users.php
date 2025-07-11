@@ -2,6 +2,10 @@
 include 'header.php';
 include 'db_connect.php';
 ?>
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css" />
+<!-- DataTables Responsive CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css" />
 
 <style>
     .bg-primary {
@@ -13,264 +17,272 @@ include 'db_connect.php';
         background-color: rgba(204, 204, 204, 0.77);
         border-color: rgb(212, 212, 212);
     }
+
+    thead {
+        background-color: rgba(135, 206, 235, 0.5) !important;
+    }
 </style>
 
 <body class="hold-transition layout-fixed">
-    <div class="wrapper">
-        <?php include 'navbar.php'; ?>
+<div class="wrapper">
+    <?php include 'navbar.php'; ?>
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 mx-auto mt-4">
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-primary text-white">
+                            <h5 style="color: black; font-size: 40px; font-weight: bold;" class="mb-0 d-inline">Users List</h5>
+                            <button id="addUserBtn" class="btn btn-success btn-sm float-right">+ Add User</button>
+                        </div>
+                        <div class="card-body">
+                            <table id="usersTable" class="table table-bordered table-hover dt-responsive nowrap" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>Role</th>
+                                    <th>Username</th>
+                                    <th>Full Name</th>
+                                    <th>Age</th>
+                                    <th>Birthdate</th>
+                                    <th>Address</th>
+                                    <th>Email</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+<?php
+$sql = "SELECT * FROM user";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        echo "<tr>
+                <td>" . ucfirst(htmlspecialchars($row['role'])) . "</td>
+                <td>" . htmlspecialchars($row['username']) . "</td>
+                <td>" . htmlspecialchars($row['fname']) . " " . htmlspecialchars($row['lname']) . "</td>
+                <td>" . htmlspecialchars($row['age']) . "</td>
+                <td>" . htmlspecialchars($row['birthdate']) . "</td>
+                <td>" . htmlspecialchars($row['address']) . "</td>
+                <td>" . htmlspecialchars($row['email']) . "</td>
+                <td>
+                    <button class='btn btn-warning btn-sm editUserBtn'
+                        data-id='{$row['id']}'
+                        data-username='" . htmlspecialchars($row['username']) . "'
+                        data-fname='" . htmlspecialchars($row['fname']) . "'
+                        data-lname='" . htmlspecialchars($row['lname']) . "'
+                        data-age='" . htmlspecialchars($row['age']) . "'
+                        data-birthdate='" . htmlspecialchars($row['birthdate']) . "'
+                        data-address='" . htmlspecialchars($row['address']) . "'
+                        data-email='" . htmlspecialchars($row['email']) . "'
+                        data-role='" . htmlspecialchars($row['role']) . "'>Edit</button>";
+        
+        if (strtolower($row['role']) !== 'admin') {
+            echo " <button class='btn btn-danger btn-sm deleteUserBtn' data-id='{$row['id']}'>Delete</button>";
+        }
 
-        <!-- Content Wrapper -->
-        <div class="content-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-10 mx-auto mt-4">
-                        <div class="card shadow-lg">
-                            <div class="card-header bg-primary text-white">
-                                <h5 style="color: black;" class="mb-0 d-inline">Users List</h5>
-                                <button id="addUserBtn" class="btn btn-success btn-sm float-right">+ Add User</button>
-                            </div>
-                            <div class="card-body">
-                                <table class="table table-bordered table-hover">
-                                    <thead class="">
-                                        <tr>
-                                            <th>Role</th>
-                                            <th>Username</th>
-                                            <th>Email</th>
-                                            <th>Created At</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $sql = "SELECT userid, role, username, email, created_at FROM users";
-                                        $result = $conn->query($sql);
-
-                                        if ($result->num_rows > 0) {
-                                            while ($row = $result->fetch_assoc()) {
-                                                echo "<tr>";
-                                                echo "<td>" . ucfirst(htmlspecialchars($row['role'])) . "</td>";
-                                                echo "<td>" . htmlspecialchars($row['username']) . "</td>";
-                                                echo "<td>" . htmlspecialchars($row['email']) . "</td>";
-                                                echo "<td>" . $row['created_at'] . "</td>";
-                                                echo "<td>
-                                                        <button class='btn btn-warning btn-sm editUserBtn' 
-                                                            data-id='" . $row['userid'] . "' 
-                                                            data-username='" . htmlspecialchars($row['username']) . "' 
-                                                            data-email='" . htmlspecialchars($row['email']) . "' 
-                                                            data-role='" . $row['role'] . "'>Edit</button>
-
-                                                        <button class='btn btn-danger btn-sm deleteUserBtn' 
-                                                            data-id='" . $row['userid'] . "'>Delete</button>
-                                                    </td>";
-
-                                                echo "</tr>";
-                                            }
-                                        } else {
-                                            echo "<tr><td colspan='6' class='text-center'>No users found</td></tr>";
-                                        }
-
-                                        $conn->close();
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
+        echo "</td></tr>";
+    }
+} else {
+    echo "<tr><td colspan='8' class='text-center'>No users found</td></tr>";
+}
+$conn->close();
+?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                </div> <!-- End of Row -->
-            </div> <!-- End of Container -->
-        </div> <!-- End of Content Wrapper -->
-    </div> <!-- End of Wrapper -->
-
-    <!-- Include SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const tableBody = document.querySelector("tbody");
-
-            // 🟢 ADD USER BUTTON FUNCTIONALITY
-            document.getElementById('addUserBtn').addEventListener('click', function() {
-                Swal.fire({
-                    title: 'Add New User',
-                    html: `
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <select id="swal-role" class="swal2-input">
-                    <option value="admin">Admin</option>
-                    <option value="Admin/Planning">Admin/Planning</option>
-                    <option value="RPS">RPS</option>
-                    <option value="CDS">CDS</option>
-                    <option value="MES">MES</option>
-                    <option value="PAMO">PAMO</option>
-                    <option value="Special Concern">Special Concern</option>
-                </select>
-                <input type="text" id="swal-username" class="swal2-input" placeholder="Username">
-                <input type="email" id="swal-email" class="swal2-input" placeholder="Email">
-                <input type="password" id="swal-password" class="swal2-input" placeholder="Password">
-                <input type="password" id="swal-confirm-password" class="swal2-input" placeholder="Confirm Password">
-                <div style="display: flex; align-items: center;">
-                    <input type="checkbox" id="swal-show-password">
-                    <label for="swal-show-password" style="margin-left: 5px;">Show Password</label>
                 </div>
             </div>
-        `,
-                    confirmButtonText: 'Add User',
-                    showCancelButton: true,
-                    didOpen: () => {
-                        document.getElementById("swal-show-password").addEventListener("change", function() {
-                            const passwordField = document.getElementById("swal-password");
-                            const confirmPasswordField = document.getElementById("swal-confirm-password");
-                            const type = this.checked ? "text" : "password";
-                            passwordField.type = type;
-                            confirmPasswordField.type = type;
-                        });
-                    },
-                    preConfirm: () => {
-                        const role = document.getElementById("swal-role").value.trim();
-                        const username = document.getElementById("swal-username").value.trim();
-                        const email = document.getElementById("swal-email").value.trim();
-                        const password = document.getElementById("swal-password").value;
-                        const confirmPassword = document.getElementById("swal-confirm-password").value;
+        </div>
+    </div>
+</div>
 
-                        if (!role || !username || !email || !password || !confirmPassword) {
-                            Swal.showValidationMessage('❌ All fields are required!');
-                            return false;
-                        }
-                        if (password !== confirmPassword) {
-                            Swal.showValidationMessage('❌ Passwords do not match!');
-                            return false;
-                        }
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+<!-- DataTables Responsive JS -->
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-                        return fetch('add_user.php', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded'
-                                },
-                                body: `role=${encodeURIComponent(role)}&username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
-                            })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.status === 'success') {
-                                    Swal.fire('✅ User Added!', '', 'success').then(() => location.reload());
-                                } else {
-                                    Swal.fire('❌ Error!', data.message, 'error');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                Swal.fire('❌ Error!', 'Something went wrong', 'error');
-                            });
+<script>
+$(document).ready(function() {
+    // Initialize DataTable with responsive extension
+    $('#usersTable').DataTable({
+        responsive: true,
+        order: []
+    });
+
+    // Add user button click
+    $('#addUserBtn').on('click', function() {
+        Swal.fire({
+            title: 'Add New User',
+            html: `
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <select id="swal-role" class="swal2-input">
+                        <option value="admin">Admin</option>
+                        <option value="encoder">Encoder</option>
+                    </select>
+                    <input type="text" id="swal-fname" class="swal2-input" placeholder="First Name">
+                    <input type="text" id="swal-lname" class="swal2-input" placeholder="Last Name">
+                    <input type="text" id="swal-username" class="swal2-input" placeholder="Generated Username" disabled>
+                    <input type="number" id="swal-age" class="swal2-input" placeholder="Age">
+                    <input type="date" id="swal-birthdate" class="swal2-input">
+                    <input type="text" id="swal-address" class="swal2-input" placeholder="Address">
+                    <input type="email" id="swal-email" class="swal2-input" placeholder="Email">
+                </div>
+            `,
+            confirmButtonText: 'Add User',
+            showCancelButton: true,
+            didOpen: () => {
+                const fnameInput = document.getElementById("swal-fname");
+                const lnameInput = document.getElementById("swal-lname");
+                const roleSelect = document.getElementById("swal-role");
+                const usernameInput = document.getElementById("swal-username");
+
+                function generateUsername() {
+                    const fname = fnameInput.value.toLowerCase().replace(/\s+/g, '');
+                    const lname = lnameInput.value.toLowerCase().replace(/\s+/g, '');
+                    const role = roleSelect.value.toLowerCase();
+                    if (fname && lname && role) {
+                        usernameInput.value = `${fname}.${lname}@${role}`;
+                    } else {
+                        usernameInput.value = '';
+                    }
+                }
+
+                fnameInput.addEventListener("input", generateUsername);
+                lnameInput.addEventListener("input", generateUsername);
+                roleSelect.addEventListener("change", generateUsername);
+            },
+            preConfirm: () => {
+                const role = $('#swal-role').val().toLowerCase();
+                const fname = $('#swal-fname').val().trim();
+                const lname = $('#swal-lname').val().trim();
+                const username = `${fname.toLowerCase().replace(/\s+/g, '')}.${lname.toLowerCase().replace(/\s+/g, '')}@${role}`;
+                const age = $('#swal-age').val().trim();
+                const birthdate = $('#swal-birthdate').val().trim();
+                const address = $('#swal-address').val().trim();
+                const email = $('#swal-email').val().trim();
+                const password = 'prms@matalom'; // Default password
+
+                if (!role || !fname || !lname || !age || !birthdate || !address || !email) {
+                    Swal.showValidationMessage('❌ All fields are required!');
+                    return false;
+                }
+
+                return fetch('add_user.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        role, username, fname, lname, age, birthdate, address, email, password
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire('✅ User Added!', '', 'success').then(() => location.reload());
+                    } else {
+                        Swal.fire('❌ Error!', data.message, 'error');
                     }
                 });
-            });
-
-
-
-            // 🟠 EDIT USER BUTTON FUNCTIONALITY
-            tableBody.addEventListener("click", function(event) {
-                if (event.target.classList.contains("editUserBtn")) {
-                    const button = event.target;
-                    const userId = button.dataset.id;
-                    const username = button.dataset.username;
-                    const email = button.dataset.email;
-                    const role = button.dataset.role;
-
-                    Swal.fire({
-                        title: 'Edit User',
-                        html: `
-                            <div style="display: flex; flex-direction: column; gap: 10px;">
-                                <select id="swal-role" class="swal2-input">
-                                    <option value="ADMIN" ${role === 'admin' ? 'selected' : ''}>Admin</option>
-                                    <option value="ADMIN PLANNING" ${role === 'adminplanning' ? 'selected' : ''}>Admin/Planning</option>
-                                    <option value="RPS" ${role === 'rps' ? 'rps' : ''}>RPS</option>
-                                    <option value="CDS" ${role === 'cds' ? 'cds' : ''}>CDS</option>
-                                    <option value="MES" ${role === 'mes' ? 'mes' : ''}>MES</option>
-                                    <option value="PAMO" ${role === 'pamo' ? 'pamo' : ''}>PAMO</option>
-                                    <option value="SPECIAL CONCERN" ${role === 'sc' ? 'selected' : ''}>Special Concern</option>
-                                </select>
-                                <input type="text" id="swal-username" class="swal2-input" value="${username}">
-                                <input type="email" id="swal-email" class="swal2-input" value="${email}">
-                            </div>
-                        `,
-                        confirmButtonText: 'Update User',
-                        showCancelButton: true,
-                        preConfirm: () => {
-                            const updatedRole = document.getElementById("swal-role").value;
-                            const updatedUsername = document.getElementById("swal-username").value.trim();
-                            const updatedEmail = document.getElementById("swal-email").value.trim();
-
-                            if (!updatedRole || !updatedUsername || !updatedEmail) {
-                                Swal.showValidationMessage('❌ All fields are required!');
-                                return false;
-                            }
-
-                            return fetch('update_user.php', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/x-www-form-urlencoded'
-                                    },
-                                    body: `userid=${userId}&role=${updatedRole}&username=${updatedUsername}&email=${updatedEmail}`
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.status === 'success') {
-                                        Swal.fire('✅ User Updated!', '', 'success').then(() => location.reload());
-                                    } else {
-                                        Swal.fire('❌ Error!', data.message, 'error');
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error('Error:', error);
-                                    Swal.fire('❌ Error!', 'Something went wrong', 'error');
-                                });
-                        }
-                    });
-                }
-            });
-            tableBody.addEventListener("click", function(event) {
-                if (event.target.classList.contains("deleteUserBtn")) {
-                    const userId = event.target.dataset.id;
-                    console.log("User ID to delete:", userId);
-
-                    Swal.fire({
-                        title: "Are you sure?",
-                        text: "This action cannot be undone!",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#d33",
-                        cancelButtonColor: "#3085d6",
-                        confirmButtonText: "Yes, delete it!"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            console.log("Deleting user...");
-
-                            fetch("delete_user.php", {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type": "application/x-www-form-urlencoded"
-                                    },
-                                    body: `id=${userId}`
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    console.log("Response from server:", data);
-                                    if (data.status === "success") {
-                                        Swal.fire("Deleted!", "User has been removed.", "success")
-                                            .then(() => location.reload());
-                                    } else {
-                                        Swal.fire("Error!", data.message, "error");
-                                    }
-                                })
-                                .catch(error => {
-                                    console.error("Fetch error:", error);
-                                    Swal.fire("Error!", "Something went wrong.", "error");
-                                });
-                        }
-                    });
-                }
-            });
+            }
         });
-    </script>
+    });
+
+    // Edit button click
+    $('#usersTable tbody').on('click', '.editUserBtn', function() {
+        const btn = $(this);
+        const userId = btn.data('id');
+        const role = btn.data('role');
+        const username = btn.data('username');
+        const fname = btn.data('fname');
+        const lname = btn.data('lname');
+        const age = btn.data('age');
+        const birthdate = btn.data('birthdate');
+        const address = btn.data('address');
+        const email = btn.data('email');
+
+        Swal.fire({
+            title: 'Edit User',
+            html: `
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <select id="swal-role" class="swal2-input">
+                        <option value="admin" ${role === 'admin' ? 'selected' : ''}>Admin</option>
+                        <option value="encoder" ${role === 'encoder' ? 'selected' : ''}>Encoder</option>
+                    </select>
+                    <input type="text" id="swal-username" class="swal2-input" value="${username}" disabled>
+                    <input type="text" id="swal-fname" class="swal2-input" value="${fname}">
+                    <input type="text" id="swal-lname" class="swal2-input" value="${lname}">
+                    <input type="number" id="swal-age" class="swal2-input" value="${age}">
+                    <input type="date" id="swal-birthdate" class="swal2-input" value="${birthdate}">
+                    <input type="text" id="swal-address" class="swal2-input" value="${address}">
+                    <input type="email" id="swal-email" class="swal2-input" value="${email}">
+                </div>
+            `,
+            confirmButtonText: 'Update User',
+            showCancelButton: true,
+            preConfirm: () => {
+                const formData = new URLSearchParams({
+                    id: userId,
+                    role: $('#swal-role').val().toLowerCase(),
+                    username: username,
+                    fname: $('#swal-fname').val().trim(),
+                    lname: $('#swal-lname').val().trim(),
+                    age: $('#swal-age').val().trim(),
+                    birthdate: $('#swal-birthdate').val().trim(),
+                    address: $('#swal-address').val().trim(),
+                    email: $('#swal-email').val().trim(),
+                });
+
+                return fetch('update_user.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire('✅ User Updated!', '', 'success').then(() => location.reload());
+                    } else {
+                        Swal.fire('❌ Error!', data.message, 'error');
+                    }
+                });
+            }
+        });
+    });
+
+    // Delete button click
+    $('#usersTable tbody').on('click', '.deleteUserBtn', function() {
+        const userId = $(this).data('id');
+        Swal.fire({
+            title: "Are you sure?",
+            text: "This action cannot be undone!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!"
+        }).then(result => {
+            if (result.isConfirmed) {
+                fetch("delete_user.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "id=" + userId
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        Swal.fire("Deleted!", "User has been removed.", "success").then(() => location.reload());
+                    } else {
+                        Swal.fire("Error!", data.message, "error");
+                    }
+                });
+            }
+        });
+    });
+});
+</script>
 
 </body>
-
 <?php include 'footer.php'; ?>

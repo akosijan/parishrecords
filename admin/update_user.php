@@ -1,28 +1,39 @@
 <?php
 include 'db_connect.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!isset($_POST['userid'], $_POST['role'], $_POST['username'], $_POST['email'])) {
-        echo json_encode(["status" => "error", "message" => "Missing fields"]);
-        exit();
+header('Content-Type: application/json');
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $required_fields = ['id', 'role', 'username', 'fname', 'lname', 'age', 'birthdate', 'address', 'email'];
+    foreach ($required_fields as $field) {
+        if (!isset($_POST[$field])) {
+            echo json_encode(["status" => "error", "message" => "Missing field: $field"]);
+            exit();
+        }
     }
 
-    $userid = intval($_POST['userid']);
-    $role = trim($_POST['role']);
+    $id = intval($_POST['id']);
+    $role = strtolower(trim($_POST['role']));
     $username = trim($_POST['username']);
+    $fname = trim($_POST['fname']);
+    $lname = trim($_POST['lname']);
+    $age = intval($_POST['age']);
+    $birthdate = trim($_POST['birthdate']);
+    $address = trim($_POST['address']);
     $email = trim($_POST['email']);
 
-    if (empty($userid) || empty($role) || empty($username) || empty($email)) {
+    if (empty($id) || empty($role) || empty($username) || empty($fname) || empty($lname) || empty($email)) {
         echo json_encode(["status" => "error", "message" => "All fields are required!"]);
         exit();
     }
 
-    $stmt = $conn->prepare("UPDATE users SET role=?, username=?, email=? WHERE userid=?");
-    if ($stmt === false) {
+    $stmt = $conn->prepare("UPDATE user SET role = ?, username = ?, fname = ?, lname = ?, age = ?, birthdate = ?, address = ?, email = ? WHERE id = ?");
+    if (!$stmt) {
         echo json_encode(["status" => "error", "message" => "Database error: " . $conn->error]);
         exit();
     }
-    $stmt->bind_param("sssi", $role, $username, $email, $userid);
+
+    $stmt->bind_param("ssssisssi", $role, $username, $fname, $lname, $age, $birthdate, $address, $email, $id);
 
     if ($stmt->execute()) {
         echo json_encode(["status" => "success"]);

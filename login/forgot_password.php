@@ -13,38 +13,18 @@ if (isset($_SESSION['login_userid'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
-
-    <!-- jquery -->
     <script src="../assets/plugins/jquery/jquery.min.js"></script>
-
-    <!-- bootstrap -->
     <script src="../assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Font Awesome CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
-    <!-- adminlte -->
     <script src="../assets/dist/js/adminlte.min.js"></script>
     <link rel="stylesheet" href="../assets/dist/css/adminlte.min.css">
-
 </head>
 
 <style>
-    /* Fullscreen video background */
-    .video-background {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        /* Make sure the video stays behind content */
-        object-fit: fill;
-        /* Cover the entire screen */
-    }
-
     body {
         position: relative;
+        background-image: url('../assets/img/loginp.jpg'); /* replace with your preferred background */
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -53,13 +33,7 @@ if (isset($_SESSION['login_userid'])) {
     body::before {
         content: "";
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
+        top: 0; left: 0; right: 0; bottom: 0;
         filter: blur(5px);
         z-index: -1;
     }
@@ -67,10 +41,7 @@ if (isset($_SESSION['login_userid'])) {
     body::after {
         content: "";
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        top: 0; left: 0; right: 0; bottom: 0;
         background-color: rgba(255, 255, 255, 0.3);
         z-index: -1;
     }
@@ -91,20 +62,14 @@ if (isset($_SESSION['login_userid'])) {
 
 
 <body>
-    <!-- Background video -->
-    <video autoplay muted loop class="video-background">
+    <!-- <video autoplay muted loop class="video-background">
         <source src="../assets/img/background video.mp4" type="video/mp4">
-        <!-- You can also add other formats if you want to support more browsers -->
-        <!-- <source src="your-video-file.webm" type="video/webm"> -->
-    </video>
-
+    </video> -->
 
     <div class="d-flex flex-column min-vh-100">
-        <!-- Main Content -->
         <div class="container d-flex justify-content-center align-items-center flex-grow-1">
             <div class="card w-100 shadow">
                 <div class="row">
-                    <!-- Left Form (Carousel) - Hidden on Mobile -->
                     <div class="col-md-6 d-none d-md-flex justify-content-center p-3 left-form">
                         <div class="container">
                             <div id="carouselExample" class="carousel slide w-100" data-ride="carousel">
@@ -130,44 +95,176 @@ if (isset($_SESSION['login_userid'])) {
                             </div>
                         </div>
                     </div>
-
-                    <!-- Right Form (Login Form) -->
                     <div class="col-12 col-md-6 p-3">
                         <div class="container p-4">
                             <h1 class="mb-4 text-center" style="font-weight:bold; font-size: 48px;">Password Recovery</h1>
-                            <form action="#" method="post">
+                            <form id="otpForm">
                                 <div class="form-group mb-4">
                                     <label for="email" class="form-label">Email</label>
-                                    <input type="text" class="form-control" name="email" id="email" placeholder="Enter your email" autofocus autocomplete="on">
+                                    <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email" required>
                                 </div>
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary w-50" name="btn-login">Send OTP</button>
-                                </div>
-                                <hr>
-                                <div class="login-footer mt-3 text-center">
-                                    <a href="login.php" style="text-decoration:underline;">Go Back to Login</a>
-                                </div>
+    <button type="button" class="btn btn-primary w-50" id="sendOtpBtn">Send OTP</button>
+</div>
+<div class="text-center mt-3">
+    <a href="login.php" class="text-primary" style="text-decoration: underline;">Back to Login</a>
+</div>
+
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Footer -->
-        <footer class="mt-auto text-white py-4">
-            <div class="container text-center">
-                <!-- <p class="mb-2">
-                    EVSU-OC Entry & Exit Verification System. All Rights Reserved &copy; 2024-<span id="year"></span>
-                </p>
-                <p class="mb-2">
-                    A Capstone Project by <a href="https://github.com/Kaelx" target="_blank" rel="noopener noreferrer" style="text-decoration: underline; color: white;">Elevatech</a>
-                </p> -->
-            </div>
-        </footer>
-
-
     </div>
+
+    <script>
+     $(document).ready(function () {
+    $('#sendOtpBtn').click(function () {
+        var email = $('#email').val().trim();
+        if (email === '') {
+            Swal.fire('Error', 'Please enter your email', 'error');
+            return;
+        }
+        Swal.fire({
+            title: 'Sending OTP...',
+            text: 'Please wait a moment',
+            allowOutsideClick: false,
+            didOpen: () => { Swal.showLoading(); }
+        });
+        $.ajax({
+            url: 'send_otp.php',
+            type: 'POST',
+            data: { email: email },
+            dataType: 'json',
+            success: function (response) {
+                Swal.close();
+                if (response.status === 'success') {
+                    Swal.fire({
+                        title: 'Enter OTP',
+                        input: 'text',
+                        inputLabel: 'Check your email for the OTP',
+                        inputPlaceholder: 'Enter OTP here',
+                        showCancelButton: true,
+                        confirmButtonText: 'Verify OTP',
+                        preConfirm: (otp) => {
+                            return $.ajax({
+                                url: 'verify_otp.php',
+                                type: 'POST',
+                                data: { otp: otp },
+                                dataType: 'json'
+                            }).then(response => {
+                                if (response.status === 'success') {
+                                    return Swal.fire({
+                                        title: 'OTP Verified!',
+                                        html: `
+                                            <label for="new_password">Enter New Password:</label>
+                                            <input type="password" id="new_password" class="swal2-input" placeholder="New Password">
+                                            <div id="password-requirements" style="margin-top: 10px; text-align: center; font-size:10px">
+                                                <p style="color:red;">❌ Password must be at least 8 characters</p>
+                                                <p style="color:red;">❌ Password must contain an uppercase letter</p>
+                                                <p style="color:red;">❌ Password must contain a lowercase letter</p>
+                                                <p style="color:red;">❌ Password must contain a number</p>
+                                                <p style="color:red;">❌ Password must contain a special character</p>
+                                            </div>
+                                            <label for="confirm_password">Confirm Password:</label>
+                                            <input type="password" id="confirm_password" class="swal2-input" placeholder="Confirm Password">
+                                        `,
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Change Password',
+                                        didOpen: () => {
+                                            let passwordInput = $("#new_password");
+                                            let confirmPasswordInput = $("#confirm_password");
+                                            let changePasswordBtn = $(".swal2-confirm");
+                                            let passwordRequirements = $("#password-requirements");
+                                            let rules = [
+                                                { regex: /.{8,}/, text: "Password must be at least 8 characters" },
+                                                { regex: /[A-Z]/, text: "Password must contain an uppercase letter" },
+                                                { regex: /[a-z]/, text: "Password must contain a lowercase letter" },
+                                                { regex: /[0-9]/, text: "Password must contain a number" },
+                                                { regex: /[\W]/, text: "Password must contain a special character" }
+                                            ];
+                                            function checkPasswordStrength() {
+                                                let password = passwordInput.val();
+                                                let confirmPassword = confirmPasswordInput.val();
+                                                let allMet = true;
+                                                let requirementsHtml = "";
+                                                rules.forEach(rule => {
+                                                    if (rule.regex.test(password)) {
+                                                        requirementsHtml += `<p style="color:green;">✅ ${rule.text}</p>`;
+                                                    } else {
+                                                        requirementsHtml += `<p style="color:red;">❌ ${rule.text}</p>`;
+                                                        allMet = false;
+                                                    }
+                                                });
+                                                if (allMet) {
+                                                    passwordRequirements.html('<p style="color:green; font-weight:bold;">✅ Password meets all the requirements</p>');
+                                                } else {
+                                                    passwordRequirements.html(requirementsHtml);
+                                                }
+                                                if (allMet && password === confirmPassword && password !== "") {
+                                                    changePasswordBtn.prop("disabled", false);
+                                                } else {
+                                                    changePasswordBtn.prop("disabled", true);
+                                                }
+                                                if (confirmPassword !== "" && password !== confirmPassword) {
+                                                    passwordRequirements.append('<p style="color:red;">❌ Passwords do not match</p>');
+                                                    changePasswordBtn.prop("disabled", true);
+                                                }
+                                            }
+                                            passwordInput.on("input", checkPasswordStrength);
+                                            confirmPasswordInput.on("input", checkPasswordStrength);
+                                        },
+                                        preConfirm: () => {
+                                            var newPassword = $('#new_password').val();
+                                            var confirmPassword = $('#confirm_password').val();
+                                            if (newPassword === '' || confirmPassword === '') {
+                                                Swal.showValidationMessage('Please fill in both password fields');
+                                                return false;
+                                            }
+                                            if (newPassword !== confirmPassword) {
+                                                Swal.showValidationMessage('Passwords do not match');
+                                                return false;
+                                            }
+                                            return $.ajax({
+                                                url: 'change_password.php',
+                                                type: 'POST',
+                                                data: { password: newPassword },
+                                                dataType: 'json'
+                                            }).then(response => {
+                                                if (response.status === 'success') {
+                                                    Swal.fire('Success', 'Your password has been changed.', 'success')
+                                                        .then(() => { window.location.href = 'login.php'; });
+                                                } else {
+                                                    Swal.fire('Error', response.message, 'error');
+                                                }
+                                            }).catch(() => {
+                                                Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
+                                            });
+                                        }
+                                    });
+                                } else {
+                                    Swal.fire('Error', response.message, 'error');
+                                }
+                            }).catch(() => {
+                                Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
+                            });
+                        }
+                    });
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function () {
+                Swal.close();
+                Swal.fire('Error', 'Failed to send OTP. Try again later.', 'error');
+            }
+        });
+    });
+});
+
+
+    </script>
 </body>
 
 </html>
