@@ -1,6 +1,6 @@
 <?php
 include 'db_connect.php';
-include 'header.php'; // Optional shared head content
+include 'header.php';
 
 $success = '';
 $error = '';
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Marriage Record Form</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css"> <!-- Optional shared styles -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="hold-transition layout-fixed">
@@ -119,7 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-<!-- Success Modal -->
 <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">

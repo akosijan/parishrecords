@@ -12,19 +12,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = trim($_POST['password']);
     $username = trim($_POST['username']);
 
-    // Check for empty fields
     if (empty($fname) || empty($lname) || empty($age) || empty($birthdate) || empty($address) || empty($role) || empty($email) || empty($password) || empty($username)) {
         echo json_encode(['status' => 'error', 'message' => 'All fields are required!']);
         exit;
     }
 
-    // Validate email
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         echo json_encode(['status' => 'error', 'message' => 'Invalid email format!']);
         exit;
     }
 
-    // Check if username or email already exists
     $checkStmt = $conn->prepare("SELECT id FROM user WHERE username = ? OR email = ?");
     $checkStmt->bind_param("ss", $username, $email);
     $checkStmt->execute();
@@ -35,10 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $checkStmt->close();
 
-    // Hash the password
     $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
-    // Insert into database
     $stmt = $conn->prepare("INSERT INTO user (fname, lname, age, birthdate, address, role, email, password, username) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     $stmt->bind_param("ssissssss", $fname, $lname, $age, $birthdate, $address, $role, $email, $hashed_password, $username);
 

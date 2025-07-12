@@ -19,11 +19,8 @@ function formatColumnName($column) {
     <title>View PRMS Data</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- DataTables -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
-    <!-- SweetAlert -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 <body class="hold-transition layout-fixed">
@@ -114,8 +111,6 @@ function formatColumnName($column) {
     </div>
 </div>
 </div>
-
-<!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <form method="POST">
@@ -137,7 +132,6 @@ function formatColumnName($column) {
 </div>
 
 <?php
-// Update handling
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['table']) && isset($_POST['id'])) {
     $table = $_POST['table'];
     $id = $_POST['id'];
@@ -155,8 +149,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['table']) && isset($_P
     echo "<script>window.location='view_data.php';</script>";
 }
 ?>
-
-<!-- JS Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -167,7 +159,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['table']) && isset($_P
 $(document).ready(function () {
     $('.datatable').DataTable();
 
-    // EDIT
     $('.edit-btn').on('click', function () {
         const record = JSON.parse($(this).attr('data-record'));
         const modalBody = $('#editModalBody').html('');
@@ -188,7 +179,6 @@ $(document).ready(function () {
         modal.show();
     });
 
-    // DELETE
     $('.delete-btn').on('click', function () {
         const id = $(this).attr('data-id');
         const table = $(this).attr('data-table');
@@ -215,7 +205,7 @@ $(document).ready(function () {
         });
     });
 });
-// GENERATE CERTIFICATE PLACEHOLDER
+
 $('.generate-cert-btn').on('click', function () {
     Swal.fire({
         title: 'Placeholder',
@@ -228,7 +218,6 @@ $('.generate-cert-btn').on('click', function () {
 </script>
 
 <?php
-// Delete handler
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'], $_POST['delete_table'])) {
     $id = $conn->real_escape_string($_POST['delete_id']);
     $table = $conn->real_escape_string($_POST['delete_table']);

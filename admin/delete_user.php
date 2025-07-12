@@ -4,7 +4,7 @@ include 'db_connect.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
-    $userId = intval($_POST['id']);  // Sanitize input
+    $userId = intval($_POST['id']);
 
     $stmt = $conn->prepare("DELETE FROM user WHERE id = ?");
     $stmt->bind_param("i", $userId);

@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-// Only allow logged in admin users
 if (!isset($_SESSION['login_userid']) || $_SESSION['login_role'] !== 'admin') {
     header('Location: index.php');
     exit();

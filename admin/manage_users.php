@@ -96,24 +96,17 @@ $conn->close();
     </div>
 </div>
 
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<!-- DataTables JS -->
 <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
-<!-- DataTables Responsive JS -->
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
-<!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
 $(document).ready(function() {
-    // Initialize DataTable with responsive extension
     $('#usersTable').DataTable({
         responsive: true,
         order: []
     });
-
-    // Add user button click
     $('#addUserBtn').on('click', function() {
         Swal.fire({
             title: 'Add New User',
@@ -189,8 +182,6 @@ $(document).ready(function() {
             }
         });
     });
-
-    // Edit button click
     $('#usersTable tbody').on('click', '.editUserBtn', function() {
         const btn = $(this);
         const userId = btn.data('id');
@@ -252,7 +243,6 @@ $(document).ready(function() {
         });
     });
 
-    // Delete button click
     $('#usersTable tbody').on('click', '.deleteUserBtn', function() {
         const userId = $(this).data('id');
         Swal.fire({

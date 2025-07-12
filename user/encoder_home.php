@@ -19,8 +19,6 @@ include 'db_connect.php';
                 opacity: 0;
             }
         }
-
-        /* Responsive font size for mobile devices */
         @media (max-width: 768px) {
             .blinking {
                 font-size: 40px;
@@ -35,7 +33,6 @@ include 'db_connect.php';
         <div class="content-wrapper" style="margin-top: 20px;">
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <!-- Ensuring the text is bold -->
                     <h1 class="text-center fw-bold" style="font-size: 50px; font-weight: bold;">Welcome to Parish Records</h1>
 
                     <div class="blinking mt-4">TEMPORARY!</div>

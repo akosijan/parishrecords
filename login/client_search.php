@@ -9,7 +9,6 @@ if (!$category || !$value) {
     die("Invalid search parameters.");
 }
 
-// Mask function for name obfuscation
 function mask($str) {
     $words = explode(" ", $str);
     $maskedWords = [];
@@ -25,8 +24,6 @@ function mask($str) {
     }
     return implode(" ", $maskedWords);
 }
-
-// Build SQL query based on category
 if ($category === 'marriage') {
     $words = explode(" ", $value);
     $likeClauses = [];
@@ -48,7 +45,6 @@ if ($category === 'marriage') {
     $stmt->bind_param("s", $searchTerm);
 }
 
-// Execute and build results
 $stmt->execute();
 $result = $stmt->get_result();
 $records = [];

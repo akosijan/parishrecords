@@ -1,9 +1,6 @@
 <?php
 session_start();
-
-// Include the database connection file
 include 'db_connect.php';
-
 
 if (isset($_POST['btn-save'])) {
 

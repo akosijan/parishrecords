@@ -1,6 +1,6 @@
 <?php
 include 'db_connect.php';
-include 'header.php'; // Optional if you have styles/meta you want to reuse
+include 'header.php';
 
 $success = '';
 $error = '';
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="col-md-2">
                     <label for="suffix" class="form-label">Suffix</label>
                     <select name="suffix" id="suffix" class="form-select">
-                        <option value="">None</option>
+                             <option value="">None</option>
                         <option value="Jr.">Jr.</option>
                         <option value="Sr.">Sr.</option>
                         <option value="II">II</option>
@@ -120,7 +120,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
-<!-- Success Modal -->
 <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">

@@ -1,6 +1,6 @@
 <?php
 include 'db_connect.php';
-include 'header.php'; // Optional if you're using shared headers
+include 'header.php';
 
 $success = '';
 $error = '';
@@ -111,8 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </div>
-
-<!-- Success Modal -->
 <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -129,7 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// Loading button logic
 const form = document.getElementById('confirmationForm');
 const submitBtn = document.getElementById('submitBtn');
 const btnText = document.getElementById('btnText');
@@ -141,7 +138,6 @@ form.addEventListener('submit', function() {
     btnLoading.classList.remove("d-none");
 });
 
-// Auto-show and hide modal after 2 seconds
 <?php if ($showModal): ?>
     const successModal = new bootstrap.Modal(document.getElementById('successModal'));
     successModal.show();

@@ -20,7 +20,6 @@ include 'db_connect.php';
             }
         }
 
-        /* Responsive font size for mobile devices */
         @media (max-width: 768px) {
             .blinking {
                 font-size: 40px;
